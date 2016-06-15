@@ -71,7 +71,7 @@ def main():
     Q = args.wo * np.eye(L*p)  # Weighting matrix on the error
     R = args.wdu * np.eye(L*m) # Weighting matrix on the Delta Control
 
-    # Regulator
+    # Controller
     mpc = reg.MPCController(A,B,C,D,\
                             L,Q,R,\
                             Lk,Pk,Qn,Rn,\
@@ -107,14 +107,6 @@ def main():
 
         # Control law
         uu = mpc.compute_u(yy,sp)
-
-        # System update
-        # if kk < np.floor(Tfin/4) and kk > np.floor(3*Tfin/4):
-        #     yy = Cs*xx + var_noise*np.random.rand(p,1)
-        #     xx = As*xx + Bs*uu
-        # else:
-        #     yy = C*xx + var_noise*np.random.rand(p,1)
-        #     xx = A*xx + B*uu
         yy = C*xx + var_noise*np.random.rand(p,1)
         xx = A*xx + B*uu
 
@@ -130,6 +122,7 @@ def main():
         u[:,kk] = uu.T
         if kk+1 < Tfin:
             x[:,kk+1] = xx.T
+    # Simulation completed
 
     print '\nSimulation completed!\n'
     
